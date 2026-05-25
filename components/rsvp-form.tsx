@@ -7,19 +7,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Heart, Check, Send, Minus, Plus, User } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
-
-interface GuestInfo {
-  fullName: string
-  email: string
-  mealChoice: string
-  dietaryRestrictions: string
-}
+import { submitRSVP, type GuestInfo } from "@/app/actions/rsvp"
 
 const createEmptyGuest = (): GuestInfo => ({
   fullName: "",
   email: "",
-  mealChoice: "",
+  mealChoice: "osso_bucco",
   dietaryRestrictions: "",
 })
 
@@ -49,7 +42,7 @@ export function RSVPForm() {
 
   const updateGuest = (index: number, field: keyof GuestInfo, value: string) => {
     const newGuests = [...guests]
-    newGuests[index] = { ...newGuests[index], [field]: value }
+    newGuests[index] = { ...newGuests[index], [field]: value as GuestInfo[keyof GuestInfo] }
     setGuests(newGuests)
   }
 
@@ -68,33 +61,16 @@ export function RSVPForm() {
     }
 
     try {
-      const supabase = createClient()
+      const result = await submitRSVP({
+        totalGuests: guestCount,
+        guests,
+      })
 
-      // Create submission record
-      const { data: submission, error: submissionError } = await supabase
-        .from("rsvp_submissions")
-        .insert({ total_guests: guestCount })
-        .select("id")
-        .single()
-
-      if (submissionError) throw submissionError
-
-      // Create guest records
-      const guestRecords = guests.map(guest => ({
-        submission_id: submission.id,
-        full_name: guest.fullName,
-        email: guest.email,
-        meal_choice: guest.mealChoice,
-        dietary_restrictions: guest.dietaryRestrictions || null,
-      }))
-
-      const { error: guestsError } = await supabase
-        .from("rsvp_guests")
-        .insert(guestRecords)
-
-      if (guestsError) throw guestsError
-
-      setSubmitted(true)
+      if (result.success) {
+        setSubmitted(true)
+      } else {
+        setError(result.error || "Une erreur est survenue. Veuillez réessayer.")
+      }
     } catch (err) {
       console.error("Error submitting RSVP:", err)
       setError("Une erreur est survenue. Veuillez réessayer.")

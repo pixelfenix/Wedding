@@ -1,7 +1,5 @@
 "use server"
 
-import { createClient } from "@/lib/supabase/server"
-
 export type GuestInfo = {
   fullName: string
   email: string
@@ -15,39 +13,45 @@ export type RSVPSubmission = {
 }
 
 export async function submitRSVP(data: RSVPSubmission) {
-  const supabase = await createClient()
+  const scriptUrl = process.env.GOOGLE_SHEETS_SCRIPT_URL
 
-  // Create the submission record
-  const { data: submission, error: submissionError } = await supabase
-    .from("rsvp_submissions")
-    .insert({
-      total_guests: data.totalGuests,
-    })
-    .select("id")
-    .single()
+  if (!scriptUrl) {
+    console.error("GOOGLE_SHEETS_SCRIPT_URL is not configured")
+    return { success: false, error: "Configuration manquante. Veuillez contacter les mariés." }
+  }
 
-  if (submissionError || !submission) {
-    console.error("Error creating submission:", submissionError)
+  try {
+    // Send each guest as a separate row to Google Sheets
+    const timestamp = new Date().toISOString()
+    const submissionId = crypto.randomUUID()
+
+    for (const guest of data.guests) {
+      const rowData = {
+        submissionId,
+        timestamp,
+        totalGuests: data.totalGuests,
+        fullName: guest.fullName,
+        email: guest.email,
+        mealChoice: guest.mealChoice === "osso_bucco" ? "Osso Bucco" : "Gnocchis au Pesto",
+        dietaryRestrictions: guest.dietaryRestrictions || "",
+      }
+
+      const response = await fetch(scriptUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(rowData),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to submit to Google Sheets: ${response.status}`)
+      }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error submitting to Google Sheets:", error)
     return { success: false, error: "Erreur lors de la soumission. Veuillez réessayer." }
   }
-
-  // Insert all guests
-  const guestsToInsert = data.guests.map((guest) => ({
-    submission_id: submission.id,
-    full_name: guest.fullName,
-    email: guest.email,
-    meal_choice: guest.mealChoice,
-    dietary_restrictions: guest.dietaryRestrictions || null,
-  }))
-
-  const { error: guestsError } = await supabase
-    .from("rsvp_guests")
-    .insert(guestsToInsert)
-
-  if (guestsError) {
-    console.error("Error inserting guests:", guestsError)
-    return { success: false, error: "Erreur lors de l'enregistrement des invités. Veuillez réessayer." }
-  }
-
-  return { success: true }
 }
