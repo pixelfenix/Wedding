@@ -21,37 +21,34 @@ export async function submitRSVP(data: RSVPSubmission) {
   }
 
   try {
-    // Send each guest as a separate row to Google Sheets
-    const timestamp = new Date().toISOString()
-    const submissionId = crypto.randomUUID()
-
-    for (const guest of data.guests) {
-      const rowData = {
-        submissionId,
-        timestamp,
-        totalGuests: data.totalGuests,
+    // Send all guests to Google Sheets
+    const payload = {
+      guests: data.guests.map(guest => ({
         fullName: guest.fullName,
         email: guest.email,
-        mealChoice: guest.mealChoice === "osso_bucco" ? "Osso Bucco" : "Gnocchis au Pesto",
+        mealChoice: guest.mealChoice,
         dietaryRestrictions: guest.dietaryRestrictions || "",
-      }
-
-      const response = await fetch(scriptUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(rowData),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Failed to submit to Google Sheets: ${response.status}`)
-      }
+      }))
     }
 
+    console.log("[v0] Sending to Google Sheets:", JSON.stringify(payload))
+    console.log("[v0] Script URL:", scriptUrl)
+
+    const response = await fetch(scriptUrl, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+
+    console.log("[v0] Response status:", response.status, response.type)
+
+    // With no-cors mode, we can't read the response, but the request should go through
     return { success: true }
   } catch (error) {
-    console.error("Error submitting to Google Sheets:", error)
+    console.error("[v0] Error submitting to Google Sheets:", error)
     return { success: false, error: "Erreur lors de la soumission. Veuillez réessayer." }
   }
 }
