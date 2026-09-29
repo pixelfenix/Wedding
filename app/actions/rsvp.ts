@@ -5,6 +5,7 @@ export type GuestInfo = {
   email: string
   mealChoice: "osso_bucco" | "gnocchis_pesto"
   dietaryRestrictions: string
+  otherComments: string
 }
 
 export type RSVPSubmission = {
@@ -28,6 +29,7 @@ export async function submitRSVP(data: RSVPSubmission) {
         email: guest.email,
         mealChoice: guest.mealChoice,
         dietaryRestrictions: guest.dietaryRestrictions || "",
+        otherComments: guest.otherComments || "",
       }))
     }
 

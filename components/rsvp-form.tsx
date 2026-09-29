@@ -14,6 +14,7 @@ const createEmptyGuest = (): GuestInfo => ({
   email: "",
   mealChoice: "osso_bucco",
   dietaryRestrictions: "",
+  otherComments: "",
 })
 
 export function RSVPForm() {
@@ -235,6 +236,20 @@ export function RSVPForm() {
                   placeholder="Veuillez indiquer vos allergies ou restrictions alimentaires..."
                   value={guest.dietaryRestrictions}
                   onChange={(e) => updateGuest(index, "dietaryRestrictions", e.target.value)}
+                  className="bg-background border-border/50 focus:border-primary/50 min-h-[100px] resize-none"
+                />
+              </div>
+
+              {/* Other Comments */}
+              <div className="space-y-2">
+                <Label htmlFor={`comments-${index}`} className="text-sm tracking-wide">
+                  Autres Commentaires
+                </Label>
+                <Textarea
+                  id={`comments-${index}`}
+                  placeholder="Un message ou une information supplémentaire..."
+                  value={guest.otherComments}
+                  onChange={(e) => updateGuest(index, "otherComments", e.target.value)}
                   className="bg-background border-border/50 focus:border-primary/50 min-h-[100px] resize-none"
                 />
               </div>
