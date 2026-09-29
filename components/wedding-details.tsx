@@ -7,6 +7,7 @@ const details = [
     icon: Clock,
     title: "Programme",
     items: [
+      "15h30 - Arrivée des invités",
       "16h00 - Début de cérémonie",
       "17h00 - Photos",
       "17h10 - Cocktail et canapés",
