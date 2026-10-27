@@ -30,12 +30,12 @@ const details = [
   },
   {
     icon: Shirt,
-    title: "Tenue",
+    title: "Code vestimentaire",
     items: [
-      "Tenue de soirée",
-      "Vert sauge encouragé",
-      "mais non obligatoire",
+      "Tenue de soirée dans",
+      "les tons pastels",
     ],
+    pastelHearts: true,
   },
 ]
 
@@ -77,6 +77,23 @@ export function WeddingDetails() {
                       {item}
                     </p>
                   ))}
+                  {detail.pastelHearts && (
+                    <div className="mt-5 flex items-center justify-center gap-2" aria-label="Couleurs pastel suggérées">
+                      {[
+                        "text-[#d9c2f5]",
+                        "text-[#f7b7bd]",
+                        "text-[#9ed9f5]",
+                        "text-[#b9e7a9]",
+                      ].map((color) => (
+                        <Heart
+                          key={color}
+                          aria-hidden="true"
+                          className={`h-7 w-7 fill-current ${color}`}
+                          strokeWidth={0}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )
