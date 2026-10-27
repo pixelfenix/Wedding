@@ -1,13 +1,17 @@
 "use client"
 
 import { DarkModeToggle } from "./dark-mode-toggle"
-import { Heart } from "lucide-react"
+import { Heart, Menu, X } from "lucide-react"
+import { useState } from "react"
 
 export function Navigation() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+      setMenuOpen(false)
     }
   }
 
@@ -44,9 +48,43 @@ export function Navigation() {
           </button>
         </div>
 
-        {/* Dark mode toggle */}
-        <DarkModeToggle />
+        <div className="flex items-center gap-2">
+          <div className="hidden md:flex">
+            <DarkModeToggle />
+          </div>
+          <button
+            type="button"
+            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/60 text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary md:hidden"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+          <div className="md:hidden">
+            <DarkModeToggle />
+          </div>
+        </div>
       </nav>
+      {menuOpen && (
+        <div className="border-t border-border/50 bg-background/95 px-4 py-4 shadow-sm backdrop-blur-md md:hidden">
+          <div className="mx-auto flex max-w-6xl flex-col gap-1">
+            {[
+              ["story", "Notre Histoire"],
+              ["details", "Détails"],
+              ["rsvp", "RSVP"],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => scrollToSection(id)}
+                className="rounded-md px-3 py-3 text-left text-sm tracking-wide text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   )
 }
