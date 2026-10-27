@@ -8,7 +8,7 @@ export function HeroSection() {
   const weddingDate = new Date("2027-05-29T16:00:00")
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-12 md:py-16">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 border border-primary/10 rounded-full" />
@@ -42,18 +42,18 @@ export function HeroSection() {
         </h1>
 
         {/* Date and location */}
-        <div className="mt-8 mb-16 space-y-2">
-          <p className="text-lg md:text-xl font-light tracking-wide text-foreground/80">
+        <div className="mt-5 mb-10 space-y-2">
+          <p className="font-serif text-2xl md:text-3xl font-medium tracking-[0.08em] text-primary">
             29 Mai 2027
           </p>
-          <p className="text-sm md:text-base text-muted-foreground tracking-wide">
-            La Distinction, Joliette, Québec
+          <p className="text-sm md:text-base font-medium tracking-[0.18em] uppercase text-foreground/75">
+            La Distinction · Joliette, Québec
           </p>
         </div>
 
         {/* Countdown */}
-        <div className="mt-12">
-          <p className="text-sm tracking-[0.2em] uppercase text-muted-foreground mb-8">
+        <div className="mt-8">
+          <p className="text-xs md:text-sm tracking-[0.2em] uppercase text-muted-foreground mb-5">
             Compte à rebours vers notre jour spécial
           </p>
           <CountdownTimer targetDate={weddingDate} />
