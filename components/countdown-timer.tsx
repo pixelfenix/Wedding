@@ -39,12 +39,11 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
     return () => clearInterval(timer)
   }, [targetDate])
 
-  const scrollWidget = (
-    <div aria-hidden="true" className="flex shrink-0 items-center justify-center self-center animate-bounce">
-      <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-primary/30 p-2">
-        <div className="h-2 w-1 rounded-full bg-primary/50" />
-      </div>
-    </div>
+  const timeSeparator = (
+    <span aria-hidden="true" className="flex shrink-0 flex-col items-center gap-1 self-center text-primary/55">
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+    </span>
   )
 
   if (!mounted) {
@@ -52,7 +51,7 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
       <div className="flex items-center justify-center gap-4 md:gap-8">
         {["Jours", "Heures", "Minutes", "Secondes"].map((label, index) => (
           <Fragment key={label}>
-            {index === 2 && scrollWidget}
+            {index > 0 && timeSeparator}
             <div className="text-center">
             <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-3 md:p-6 min-w-[70px] md:min-w-[100px] shadow-sm">
               <span className="text-3xl md:text-5xl font-serif font-light text-primary">--</span>
@@ -78,7 +77,7 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
     <div className="flex items-center justify-center gap-4 md:gap-8">
       {timeUnits.map(({ label, value }, index) => (
         <Fragment key={label}>
-          {index === 2 && scrollWidget}
+          {index > 0 && timeSeparator}
           <div className="text-center">
           <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-3 md:p-6 min-w-[70px] md:min-w-[100px] shadow-sm">
             <span className="text-3xl md:text-5xl font-serif font-light text-primary">
