@@ -40,7 +40,7 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   }, [targetDate])
 
   const timeSeparator = (
-    <span aria-hidden="true" className="flex shrink-0 flex-col items-center gap-1 self-center text-primary/55">
+    <span aria-hidden="true" className="hidden shrink-0 flex-col items-center gap-1 self-center text-primary/55 md:flex">
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
     </span>
@@ -48,12 +48,12 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
 
   if (!mounted) {
     return (
-      <div className="flex items-center justify-center gap-4 md:gap-8">
+      <div className="grid w-full grid-cols-4 items-start justify-center gap-1.5 sm:gap-3 md:flex md:w-auto md:items-center md:gap-8">
         {["Jours", "Heures", "Minutes", "Secondes"].map((label, index) => (
           <Fragment key={label}>
             {index > 0 && timeSeparator}
             <div className="text-center">
-            <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-3 md:p-6 min-w-[70px] md:min-w-[100px] shadow-sm">
+            <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-2 sm:p-3 md:p-6 min-w-0 md:min-w-[100px] shadow-sm">
               <span className="text-3xl md:text-5xl font-serif font-light text-primary">--</span>
             </div>
             <span className="text-xs md:text-sm text-muted-foreground mt-2 block tracking-widest uppercase">
@@ -74,12 +74,12 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
   ]
 
   return (
-    <div className="flex items-center justify-center gap-4 md:gap-8">
+    <div className="grid w-full grid-cols-4 items-start justify-center gap-1.5 sm:gap-3 md:flex md:w-auto md:items-center md:gap-8">
       {timeUnits.map(({ label, value }, index) => (
         <Fragment key={label}>
           {index > 0 && timeSeparator}
           <div className="text-center">
-          <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-3 md:p-6 min-w-[70px] md:min-w-[100px] shadow-sm">
+          <div className="bg-card/80 backdrop-blur-sm border border-primary/20 rounded-lg p-2 sm:p-3 md:p-6 min-w-0 md:min-w-[100px] shadow-sm">
             <span className="text-3xl md:text-5xl font-serif font-light text-primary">
               {value.toString().padStart(2, "0")}
             </span>

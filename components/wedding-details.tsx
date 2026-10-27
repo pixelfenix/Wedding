@@ -41,7 +41,7 @@ const details = [
 
 export function WeddingDetails() {
   return (
-    <section className="py-24 px-4" id="details">
+    <section className="border-t border-primary/10 bg-primary/[0.02] px-4 py-20 md:py-24" id="details">
       <div className="max-w-5xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-16">
@@ -65,7 +65,7 @@ export function WeddingDetails() {
             return (
               <div
                 key={detail.title}
-                className="bg-card border border-border/50 rounded-lg p-8 text-center shadow-sm hover:shadow-md transition-shadow"
+                className="bg-card border border-primary/15 rounded-md p-7 text-center shadow-sm shadow-primary/5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-md hover:shadow-primary/10"
               >
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 mb-6">
                   <Icon className="w-6 h-6 text-primary" />
